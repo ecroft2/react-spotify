@@ -8,6 +8,8 @@ import { fetchSearch } from "../../../api/fetchSearch";
 import { Tracks } from "./Tracks";
 import { Artists } from "./Artists";
 import { Albums } from "./Albums";
+import { Playlists } from "./Playlists";
+import { Audiobooks } from "./Audiobooks";
 
 export const Results = (props) => {
     const [filterType, setFilterType] = useState("all");
@@ -18,6 +20,7 @@ export const Results = (props) => {
             {
                 filterType,
                 query: props.query,
+                limit: props.limit,
             },
         ],
         fetchSearch,
@@ -26,23 +29,15 @@ export const Results = (props) => {
     if (isSuccess) {
         return (
             <Fragment>
-                <div>
-                    <h2>Songs</h2>
+                <Tracks tracks={data.tracks} />
 
-                    {<Tracks tracks={data.tracks} />}
-                </div>
+                <Artists artists={data.artists} />
 
-                <div>
-                    <h2>Artists</h2>
+                <Albums albums={data.albums} />
 
-                    {<Artists artists={data.artists} />}
-                </div>
+                <Playlists playlists={data.playlists} />
 
-                <div>
-                    <h2>Albums</h2>
-
-                    {<Albums albums={data.albums} />}
-                </div>
+                <Audiobooks audiobooks={data.audiobooks} />
             </Fragment>
         );
     } else {
@@ -52,4 +47,5 @@ export const Results = (props) => {
 
 Results.propTypes = {
     query: PropTypes.string.isRequired,
+    limit: PropTypes.number,
 };
