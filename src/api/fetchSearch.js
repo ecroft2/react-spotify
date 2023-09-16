@@ -1,7 +1,7 @@
 export const fetchSearch = async ({ queryKey }) => {
     const base = "https://api.spotify.com/v1/search";
 
-    const queryString = `?q=${queryKey[1].query}&type=${queryKey[1].filterType !== "all" ? queryKey[1].filterType : "album,artist,playlist,track,show,episode,audiobook"}`;
+    const queryString = `?q=${queryKey[1].query}&type=${queryKey[1].filterType !== "all" ? queryKey[1].filterType : "album,artist,playlist,track,show,episode,audiobook"}${queryKey[1].limit ? `&limit=${queryKey[1].limit}` : ""}`;
 
     const apiResponse = await fetch(base + queryString, {
         method: "GET",
