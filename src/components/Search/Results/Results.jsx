@@ -11,14 +11,16 @@ import { Albums } from "./Albums";
 import { Playlists } from "./Playlists";
 import { Audiobooks } from "./Audiobooks";
 
+import { Filters } from "../Filters";
+
 export const Results = (props) => {
-    const [filterType, setFilterType] = useState("all");
+    const [filter, setFilter] = useState("all");
 
     const { isSuccess, data } = useQuery(
         [
             "music",
             {
-                filterType,
+                filter,
                 query: props.query,
                 limit: props.limit,
             },
@@ -26,18 +28,53 @@ export const Results = (props) => {
         fetchSearch,
     );
 
+    const [availableFilters, setAvailableFilters] = useState();
+
+    useState(() => {
+        if (isSuccess) {
+            let availableFilters;
+
+            Object.keys(data).map((filter) => {
+                console.log(filter);
+                if (data[filter].items.length > 0) {
+                    filter.push(availableFilters);
+                }
+            });
+
+            console.log(availableFilters);
+
+            setAvailableFilters(availableFilters);
+        }
+    }, [isSuccess]);
+
     if (isSuccess) {
         return (
             <Fragment>
-                <Tracks tracks={data.tracks} />
+                <Filters
+                    availableFilters={availableFilters}
+                    currentFilter={filter}
+                    onFilterSelect={(filter) => setFilter(filter)}
+                />
 
-                <Artists artists={data.artists} />
+                {(filter === "all" || filter === "track") && (
+                    <Tracks tracks={data.tracks} />
+                )}
 
-                <Albums albums={data.albums} />
+                {(filter === "all" || filter === "artist") && (
+                    <Artists artists={data.artists} />
+                )}
 
-                <Playlists playlists={data.playlists} />
+                {(filter === "all" || filter === "album") && (
+                    <Albums albums={data.albums} />
+                )}
 
-                <Audiobooks audiobooks={data.audiobooks} />
+                {(filter === "all" || filter === "playlist") && (
+                    <Playlists playlists={data.playlists} />
+                )}
+
+                {(filter === "all" || filter === "audiobook") && (
+                    <Audiobooks audiobooks={data.audiobooks} />
+                )}
             </Fragment>
         );
     } else {

@@ -1,28 +1,37 @@
+import PropTypes from "prop-types";
+
 export const Filters = (props) => {
-    const itemsToMap = {
-        all: "all",
-        album: "Album",
-        artist: "Artist",
-        playlist: "Playlist",
-        track: "Track",
-        show: "Show",
-        episode: "Episode",
-        audiobook: "Audiobook",
+    const filterTypes = {
+        all: "All",
+        album: "Albums",
+        artist: "Artists",
+        playlist: "Playlists",
+        track: "Tracks",
+        audiobook: "Audiobooks",
     };
 
     return (
-        <ul
-            onClick={(event) => {
-                console.log(event);
-            }}
-        >
-            <li key="album">album</li>
-            <li key="artist">artist</li>
-            <li key="playlist">playlist</li>
-            <li key="track">track</li>
-            <li key="show">show</li>
-            <li key="episode">episode</li>
-            <li key="audiobook">audiobook</li>
+        <ul>
+            {Object.keys(filterTypes).map((filter) => {
+                return (
+                    <li
+                        key={filter}
+                        onClick={() => {
+                            props.onFilterSelect(filter);
+                        }}
+                        className={
+                            props.currentFilter === filter ? "font-bold" : null
+                        }
+                    >
+                        {filterTypes[filter]}
+                    </li>
+                );
+            })}
         </ul>
     );
+};
+
+Filters.propTypes = {
+    currentFilter: PropTypes.string.isRequired,
+    onFilterSelect: PropTypes.func.isRequired,
 };
