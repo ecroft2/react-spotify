@@ -3,7 +3,7 @@ export const Search = (props) => {
         <form
             onSubmit={(event) => {
                 event.preventDefault();
-                props.setSearchURL(event.target.search.value);
+                props.setSearchQuery(event.target.search.value);
             }}
         >
             <input
