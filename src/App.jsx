@@ -15,14 +15,14 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-    const [query, setSearchURL] = useState();
+    const [searchQuery, setSearchQuery] = useState();
 
     return (
         <QueryClientProvider client={queryClient}>
             <Fragment>
-                <Search setSearchURL={setSearchURL} />
+                <Search setSearchQuery={setSearchQuery} />
 
-                {query && <Results query={query} />}
+                {searchQuery && <Results searchQuery={searchQuery} />}
             </Fragment>
         </QueryClientProvider>
     );
