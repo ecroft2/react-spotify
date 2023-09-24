@@ -15,74 +15,95 @@ import { Filters } from "../Filters";
 
 export const Results = (props) => {
     const [filter, setFilter] = useState("all");
+    const [availableFilters, setAvailableFilters] = useState();
 
-    const { isSuccess, data } = useQuery(
+    const { isSuccess: searchSuccess, data } = useQuery(
         [
             "music",
             {
                 filter,
-                query: props.query,
+                searchQuery: props.searchQuery,
                 limit: props.limit,
             },
         ],
         fetchSearch,
     );
 
-    const [availableFilters, setAvailableFilters] = useState();
-
     useState(() => {
-        if (isSuccess) {
+        if (searchSuccess) {
             let availableFilters;
 
             Object.keys(data).map((filter) => {
-                console.log(filter);
                 if (data[filter].items.length > 0) {
                     filter.push(availableFilters);
                 }
             });
 
-            console.log(availableFilters);
-
             setAvailableFilters(availableFilters);
         }
-    }, [isSuccess]);
+    }, [searchSuccess]);
 
-    if (isSuccess) {
-        return (
-            <Fragment>
-                <Filters
-                    availableFilters={availableFilters}
-                    currentFilter={filter}
-                    onFilterSelect={(filter) => setFilter(filter)}
-                />
+    return (
+        <Fragment>
+            <Filters
+                availableFilters={availableFilters}
+                currentFilter={filter}
+                onFilterSelect={(filter) => setFilter(filter)}
+            />
 
-                {(filter === "all" || filter === "track") && (
-                    <Tracks tracks={data.tracks} />
-                )}
+            {searchSuccess ? (
+                <Fragment>
+                    {(filter === "all" || filter === "track") && (
+                        <Fragment>
+                            <Tracks
+                                filterIsSelected={filter === "track"}
+                                tracks={data.tracks}
+                            />
+                        </Fragment>
+                    )}
 
-                {(filter === "all" || filter === "artist") && (
-                    <Artists artists={data.artists} />
-                )}
+                    {(filter === "all" || filter === "artist") && (
+                        <Fragment>
+                            <Artists
+                                filterIsSelected={filter === "artist"}
+                                artists={data.artists}
+                            />
+                        </Fragment>
+                    )}
 
-                {(filter === "all" || filter === "album") && (
-                    <Albums albums={data.albums} />
-                )}
+                    {(filter === "all" || filter === "album") && (
+                        <Fragment>
+                            <Albums
+                                filterIsSelected={filter === "album"}
+                                albums={data.albums}
+                            />
+                        </Fragment>
+                    )}
 
-                {(filter === "all" || filter === "playlist") && (
-                    <Playlists playlists={data.playlists} />
-                )}
+                    {(filter === "all" || filter === "playlist") && (
+                        <Fragment>
+                            <Playlists
+                                filterIsSelected={filter === "playlist"}
+                                playlists={data.playlists}
+                            />
+                        </Fragment>
+                    )}
 
-                {(filter === "all" || filter === "audiobook") && (
-                    <Audiobooks audiobooks={data.audiobooks} />
-                )}
-            </Fragment>
-        );
-    } else {
-        return null;
-    }
+                    {(filter === "all" || filter === "audiobook") && (
+                        <Fragment>
+                            <Audiobooks
+                                filterIsSelected={filter === "audiobook"}
+                                audiobooks={data.audiobooks}
+                            />
+                        </Fragment>
+                    )}
+                </Fragment>
+            ) : null}
+        </Fragment>
+    );
 };
 
 Results.propTypes = {
-    query: PropTypes.string.isRequired,
+    searchQuery: PropTypes.string.isRequired,
     limit: PropTypes.number,
 };
