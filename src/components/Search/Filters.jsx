@@ -20,7 +20,7 @@ export const Filters = (props) => {
                             props.onFilterSelect(filter);
                         }}
                         className={
-                            props.currentFilter === filter ? "font-bold" : null
+                            props.currentFilter === filter ? "underline" : null
                         }
                     >
                         {filterTypes[filter]}
