@@ -16,7 +16,11 @@ export const Artists = (props) => {
                                         ? artist.images[1].url
                                         : "/img/artist.svg"
                                 }
-                                alt={artist.name}
+                                alt={
+                                    artist.images[1]
+                                        ? artist.name
+                                        : "Outline shape of a person with a musical note in the corner"
+                                }
                             />
 
                             <p>{artist.name}</p>

@@ -11,8 +11,16 @@ export const Playlists = (props) => {
                     {props.playlists.items.map((playlist) => (
                         <li key={playlist.id}>
                             <img
-                                src={playlist.images[0].url}
-                                alt={`Cover art for playlist: ${playlist.name}`}
+                                src={
+                                    playlist.images[0]
+                                        ? playlist.images[0].url
+                                        : "/img/artist.svg"
+                                }
+                                alt={
+                                    playlist.images[0]
+                                        ? `Cover art for playlist: ${playlist.name}`
+                                        : "TODO"
+                                }
                             />
 
                             <p>{playlist.name}</p>
