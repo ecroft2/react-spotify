@@ -5,7 +5,7 @@ export const Artists = (props) => {
     if (props.artists.items.length !== 0) {
         return (
             <Fragment>
-                <h2>Artists</h2>
+                {props.filterIsSelected === false && <h2>Artists</h2>}
 
                 <ul>
                     {props.artists.items.map((artist) => (
@@ -38,4 +38,5 @@ export const Artists = (props) => {
 
 Artists.propTypes = {
     artists: PropTypes.object.isRequired,
+    filterIsSelected: PropTypes.bool.isRequired,
 };

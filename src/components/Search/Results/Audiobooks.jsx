@@ -5,7 +5,7 @@ export const Audiobooks = (props) => {
     if (props.audiobooks.items.length !== 0) {
         return (
             <Fragment>
-                <h2>Audiobooks</h2>
+                {props.filterIsSelected === false && <h2>Audiobooks</h2>}
 
                 <ul>
                     {props.audiobooks.items.map((audiobook) => (
@@ -37,4 +37,5 @@ export const Audiobooks = (props) => {
 
 Audiobooks.propTypes = {
     audiobooks: PropTypes.object.isRequired,
+    filterIsSelected: PropTypes.bool.isRequired,
 };

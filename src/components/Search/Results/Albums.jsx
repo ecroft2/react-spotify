@@ -5,7 +5,7 @@ export const Albums = (props) => {
     if (props.albums.items.length !== 0) {
         return (
             <Fragment>
-                <h2>Albums</h2>
+                {props.filterIsSelected === false && <h2>Albums</h2>}
 
                 <ul>
                     {props.albums.items.map((album) => {
@@ -43,4 +43,5 @@ export const Albums = (props) => {
 
 Albums.propTypes = {
     albums: PropTypes.object.isRequired,
+    filterIsSelected: PropTypes.bool.isRequired,
 };

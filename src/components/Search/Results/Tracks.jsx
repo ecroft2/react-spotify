@@ -5,7 +5,7 @@ export const Tracks = (props) => {
     if (props.tracks.items.length !== 0) {
         return (
             <Fragment>
-                <h2>Tracks</h2>
+                {props.filterIsSelected === false && <h2>Tracks</h2>}
 
                 <ul>
                     {props.tracks.items.map((track) => {
@@ -32,6 +32,7 @@ export const Tracks = (props) => {
                                                     : ""
                                             }`,
                                     )}
+                                    {props.filterIsSelected && track.album.name}
                                     {duration.startsWith("00:")
                                         ? duration.slice(3)
                                         : duration}
@@ -49,4 +50,5 @@ export const Tracks = (props) => {
 
 Tracks.propTypes = {
     tracks: PropTypes.object.isRequired,
+    filterIsSelected: PropTypes.bool.isRequired,
 };

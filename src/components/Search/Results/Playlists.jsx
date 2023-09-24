@@ -5,7 +5,7 @@ export const Playlists = (props) => {
     if (props.playlists.items.length !== 0) {
         return (
             <Fragment>
-                <h2>Playlists</h2>
+                {props.filterIsSelected === false && <h2>Playlists</h2>}
 
                 <ul>
                     {props.playlists.items.map((playlist) => (
@@ -38,4 +38,5 @@ export const Playlists = (props) => {
 
 Playlists.propTypes = {
     playlists: PropTypes.object.isRequired,
+    filterIsSelected: PropTypes.bool.isRequired,
 };
