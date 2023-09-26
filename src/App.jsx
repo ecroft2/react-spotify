@@ -1,5 +1,7 @@
 import { useState, Fragment } from "react";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { Search } from "./components/Search/Search";
@@ -24,6 +26,7 @@ const App = () => {
 
                 {searchQuery && <Results searchQuery={searchQuery} />}
             </Fragment>
+            <ReactQueryDevtools initialIsOpen={true} />
         </QueryClientProvider>
     );
 };
