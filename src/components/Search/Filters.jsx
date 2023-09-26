@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 export const Filters = (props) => {
     const filterTypes = {
         all: "All",
-        album: "Albums",
-        artist: "Artists",
-        playlist: "Playlists",
-        track: "Tracks",
-        audiobook: "Audiobooks",
+        albums: "Albums",
+        artists: "Artists",
+        playlists: "Playlists",
+        tracks: "Tracks",
+        audiobooks: "Audiobooks",
     };
 
     return (
