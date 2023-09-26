@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { fetchSearch } from "../../../api/fetchSearch";
 
@@ -15,90 +15,73 @@ import { Filters } from "../Filters";
 
 export const Results = (props) => {
     const [filter, setFilter] = useState("all");
-    const [availableFilters, setAvailableFilters] = useState();
 
-    const { isSuccess: searchSuccess, data } = useQuery(
+    const { data, fetchNextPage, status } = useInfiniteQuery(
         [
             "music",
-            {
-                filter,
-                searchQuery: props.searchQuery,
-                limit: props.limit,
-            },
+            `https://api.spotify.com/v1/search?q=${props.searchQuery}&type=${
+                filter === "all"
+                    ? "album,artist,playlist,track,show,episode,audiobook"
+                    : `${filter.slice(0, -1)}`
+            }&offset=0&limit=10`,
         ],
         fetchSearch,
     );
 
-    useState(() => {
-        if (searchSuccess) {
-            let availableFilters;
-
-            Object.keys(data).map((filter) => {
-                if (data[filter].items.length > 0) {
-                    filter.push(availableFilters);
-                }
-            });
-
-            setAvailableFilters(availableFilters);
-        }
-    }, [searchSuccess]);
-
     return (
         <Fragment>
             <Filters
-                availableFilters={availableFilters}
                 currentFilter={filter}
                 onFilterSelect={(filter) => setFilter(filter)}
             />
 
-            {searchSuccess ? (
-                <Fragment>
-                    {(filter === "all" || filter === "track") && (
-                        <Fragment>
-                            <Tracks
-                                filterIsSelected={filter === "track"}
-                                tracks={data.tracks}
-                            />
-                        </Fragment>
-                    )}
+            {status === "success"
+                ? data.pages.map((page, index) => (
+                      <Fragment key={index}>
+                          {(filter === "all" || filter === "tracks") && (
+                              <Tracks
+                                  filterIsSelected={filter === "tracks"}
+                                  tracks={page.tracks}
+                                  onLoadMore={(data) => {
+                                      fetchNextPage(data);
+                                  }}
+                              />
+                          )}
 
-                    {(filter === "all" || filter === "artist") && (
-                        <Fragment>
-                            <Artists
-                                filterIsSelected={filter === "artist"}
-                                artists={data.artists}
-                            />
-                        </Fragment>
-                    )}
+                          {(filter === "all" || filter === "artists") && (
+                              <Artists
+                                  filterIsSelected={filter === "artists"}
+                                  artists={page.artists}
+                                  //   onLoadMore={(data) => console.log(data)}
+                              />
+                          )}
 
-                    {(filter === "all" || filter === "album") && (
-                        <Fragment>
-                            <Albums
-                                filterIsSelected={filter === "album"}
-                                albums={data.albums}
-                            />
-                        </Fragment>
-                    )}
+                          {(filter === "all" || filter === "albums") && (
+                              <Albums
+                                  filterIsSelected={filter === "albums"}
+                                  albums={page.albums}
+                                  //   onLoadMore={(data) => console.log(data)}
+                              />
+                          )}
 
-                    {(filter === "all" || filter === "playlist") && (
-                        <Fragment>
-                            <Playlists
-                                filterIsSelected={filter === "playlist"}
-                                playlists={data.playlists}
-                            />
-                        </Fragment>
-                    )}
+                          {(filter === "all" || filter === "playlists") && (
+                              <Playlists
+                                  filterIsSelected={filter === "playlists"}
+                                  playlists={page.playlists}
+                                  //   onLoadMore={(data) => console.log(data)}
+                              />
+                          )}
 
-                    {(filter === "all" || filter === "audiobook") && (
-                        <Fragment>
-                            <Audiobooks
-                                filterIsSelected={filter === "audiobook"}
-                                audiobooks={data.audiobooks}
-                            />
-                        </Fragment>
-                    )}
-                </Fragment>
-            ) : null}
+                          {(filter === "all" || filter === "audiobooks") && (
+                              <Audiobooks
+                                  filterIsSelected={filter === "audiobooks"}
+                                  audiobooks={page.audiobooks}
+                                  //   onLoadMore={(data) => console.log(data)}
+                              />
+                          )}
+                      </Fragment>
+                  ))
+                : null}
         </Fragment>
     );
 };
